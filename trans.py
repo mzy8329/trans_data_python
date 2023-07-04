@@ -1,7 +1,5 @@
 import pandas as pd
 import os
-import jieba
-import math
 
 
 
