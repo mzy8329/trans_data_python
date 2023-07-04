@@ -12,42 +12,11 @@ trans_fold_path = 'D:\\Code\\Python\\转置数据\\trans_data'
 items = ['资产', '负债', '损失', '利益']
 items_have = [0, 0, 0, 0]
 
-sim_threshold = 0.8
 
 class item:
     def __init__(self, itm):
         self.itm = itm
         self.names = []
-
-def cosineSimilarity(list_A, list_B):
-    listA_cut = [i for i in jieba.cut(list_A, cut_all=True) if i != '']
-    listB_cut = [i for i in jieba.cut(list_B, cut_all=True) if i != '']
-    word_set = set(listA_cut).union(set(listB_cut))
-    word_dict = dict()
-    for word, i in zip(word_set, range(len(word_set))):
-        word_dict[word] = i
-
-    listA_cut_code = [0]*len(word_dict)
-    listB_cut_code = [0]*len(word_dict)
-
-    for word in listA_cut:
-        listA_cut_code[word_dict[word]]+=1
-
-    for word in listB_cut:
-        listB_cut_code[word_dict[word]]+=1
-
-    sum, sqA, sqB = [0, 0, 0]
-    for i in range(len(word_dict)):
-        sum += listA_cut_code[i] * listB_cut_code[i]
-        sqA += pow(listA_cut_code[i], 2)
-        sqB += pow(listB_cut_code[i], 2)
-
-    try:
-        result = round(float(sum)/(math.sqrt(sqA)*math.sqrt(sqB)), 2)
-    except ZeroDivisionError:
-        result = 0.0
-
-    return result
 
 
 
@@ -70,13 +39,7 @@ if __name__ == "__main__":
             for i in range(len(items)):
                 if(file_data.iloc[row][0] == items[i]):
                     if(file_data.iloc[row][1] not in item_list[i].names and (file_data.iloc[row][4] == '' or str(file_data.iloc[row][4])[-1] != '部')):
-                        sim = False
-                        for head in item_list[i].names:
-                           if(cosineSimilarity(head, file_data.iloc[row][1]) > sim_threshold):
-                                sim = True
-                                break
-                        if(not sim):
-                            item_list[i].names.append(file_data.iloc[row][1])  
+                        item_list[i].names.append(file_data.iloc[row][1])  
             
             if(file_data.iloc[row][0] in items  and  file_data.iloc[row][3] not in time_list):
                 output_data['银行名'].append(bank_name)
@@ -97,13 +60,6 @@ if __name__ == "__main__":
                     data = file_data.iloc[row][2]
                     time = file_data.iloc[row][3]
                     data_num = time_list.index(time)
-                    
-                    for name in itm.names:
-                        if(head != name and  cosineSimilarity(head, name) > sim_threshold):
-                            print(head, name)
-                            head = name
-                            
-                            break
 
                     if head == '合计':
                         head = itm.itm + ' 合计'
