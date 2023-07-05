@@ -84,5 +84,5 @@ if __name__ == "__main__":
 
 
         df = pd.DataFrame.from_dict(output_data)
-        df.to_excel(trans_fold_path+'\\'+file)
+        df.to_excel(trans_fold_path+'\\'+file, index = False)
 
