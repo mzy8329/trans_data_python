@@ -6,10 +6,7 @@ import os
 origin_fold_path = 'D:\\Code\\Python\\转置数据\\origin_data'
 trans_fold_path = 'D:\\Code\\Python\\转置数据\\trans_data'
 
-
 items = ['资产', '负债', '损失', '利益']
-items_have = [0, 0, 0, 0]
-
 
 class item:
     def __init__(self, itm):
