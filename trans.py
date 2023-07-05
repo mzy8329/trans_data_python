@@ -66,6 +66,9 @@ if __name__ == "__main__":
                         output_data[head].append('')
                     output_data[head].append(data)
 
+            value_tmp = output_data[itm.itm + ' 合计']
+            output_data.pop(itm.itm + ' 合计', None)
+            output_data[itm.itm + ' 合计'] = value_tmp
 
 
         max_len = 0
