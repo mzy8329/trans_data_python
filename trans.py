@@ -76,7 +76,8 @@ if __name__ == "__main__":
         for key in output_data:
             if(len(output_data[key]) > max_len):
                 max_len = len(output_data[key])
-        print(max_len)
+        if(max_len > len(time_list)):
+            print(file+' 有多的行可以合并')
 
         for key in output_data:
             for _ in range(max_len - len(output_data[key])):
@@ -86,3 +87,9 @@ if __name__ == "__main__":
         df = pd.DataFrame.from_dict(output_data)
         df.to_excel(trans_fold_path+'\\'+file, index = False)
 
+    for file in origin_files:
+        data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=None ,keep_default_na=False)
+        for itm in items:
+            if(itm+' 合计' in data_fy.iloc[0].to_list()):     
+                data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
+        data_fy.to_excel(trans_fold_path+'\\'+file, index = False, header=False)
