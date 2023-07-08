@@ -144,9 +144,9 @@ if __name__ == "__main__":
             data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
     data_fy.to_excel(trans_fold_path+'\\'+merged_file_name, index = False, header=False)
     
-    # for file in origin_files:
-    #     data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=None ,keep_default_na=False)
-    #     for itm in items:
-    #         if(itm+' 合计' in data_fy.iloc[0].to_list()):     
-    #             data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
-    #     data_fy.to_excel(trans_fold_path+'\\'+file, index = False, header=False)
+    for file in origin_files:
+        data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=None ,keep_default_na=False)
+        for itm in items:
+            if(itm+' 合计' in data_fy.iloc[0].to_list()):     
+                data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
+        data_fy.to_excel(trans_fold_path+'\\'+file, index = False, header=False)
