@@ -110,6 +110,12 @@ if __name__ == "__main__":
         for col in data_fy.keys()[2:]:
             if col not in all_col:
                 all_col.append(col)
+            else:
+                for itm in items:
+                    if col == itm + ' 合计':
+                        all_col.remove(col)
+                        all_col.append(col)
+                        
 
     for col in all_col:
         merged_data[col] = []
