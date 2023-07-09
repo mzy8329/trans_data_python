@@ -40,7 +40,7 @@ if __name__ == "__main__":
                     file_c_lists[file_index].name = file_data.iloc[row][2]
             for inf_index in range(len(file_inf)):
                 if(file_data.iloc[row][1] == file_inf[inf_index]):
-                    if(inf_index >= 5 and str(file_data.iloc[row][2])[-1] == '万'):
+                    if(inf_index >= 5 and file_data.iloc[row][2] != '' and str(file_data.iloc[row][2])[-1] == '万'):
                         data_tmp = float(file_data.iloc[row][2][:-1])*10000
                         file_c_lists[file_index].inf[inf_index]  = str(data_tmp)[:-2]
                     else:
@@ -126,7 +126,6 @@ if __name__ == "__main__":
 
     for col in all_col:
         merged_data[col] = []
-    print(merged_data)
 
     for file, file_index in zip(origin_files, range(len(origin_files))):
         data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=0 ,keep_default_na=False)
