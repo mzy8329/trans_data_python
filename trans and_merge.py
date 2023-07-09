@@ -23,6 +23,7 @@ class file_c:
         self.inf = ['' for inf in file_inf]
         self.time_list = []
         self.item_list = [item(itm) for itm in items]
+        self.item_ok = [0, 0, 0, 0]
         self.trouble = False
 
 if __name__ == "__main__":
@@ -48,6 +49,7 @@ if __name__ == "__main__":
             
             for i in range(len(items)):
                 if(file_data.iloc[row][0] == items[i]):
+                    file_c_lists[file_index].item_ok[i] = 1
                     if(file_data.iloc[row][1] not in file_c_lists[file_index].item_list[i].names and (file_data.iloc[row][4] == '' or str(file_data.iloc[row][4])[-1] != '部')):
                         file_c_lists[file_index].item_list[i].names.append(file_data.iloc[row][1])  
             
@@ -101,24 +103,30 @@ if __name__ == "__main__":
     for inf in file_inf[1:]:
         merged_data[inf] = []
 
-    all_col = []
+    all_col_list = []
+    for itm in items:
+        all_col_list.append([])
+
+    all_col = [itm+' 合计' for itm in items]
 
     for file, file_index in zip(origin_files, range(len(origin_files))):
         if(file_c_lists[file_index].trouble):
             continue
         data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=0 ,keep_default_na=False)
+        item_find = [1, 0, 0, 0]
         for col in data_fy.keys()[2:]:
-            if col not in all_col:
-                all_col.append(col)
-            else:
-                for itm in items:
-                    if col == itm + ' 合计':
-                        all_col.remove(col)
-                        all_col.append(col)
-                        
+            for index in range(len(items)):
+                if(item_find[index]):
+                    if col not in all_col:
+                        all_col.insert(all_col.index(items[index]+' 合计'), col)           
+                    if col == items[index] + ' 合计':
+                        item_find[index] = 0
+                        if index < 3:
+                            item_find[index+1] = 1
 
     for col in all_col:
         merged_data[col] = []
+    print(merged_data)
 
     for file, file_index in zip(origin_files, range(len(origin_files))):
         data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=0 ,keep_default_na=False)
@@ -150,9 +158,9 @@ if __name__ == "__main__":
             data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
     data_fy.to_excel(trans_fold_path+'\\'+merged_file_name, index = False, header=False)
     
-    for file in origin_files:
-        data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=None ,keep_default_na=False)
-        for itm in items:
-            if(itm+' 合计' in data_fy.iloc[0].to_list()):     
-                data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
-        data_fy.to_excel(trans_fold_path+'\\'+file, index = False, header=False)
+    # for file in origin_files:
+    #     data_fy = pd.read_excel(os.path.join(trans_fold_path, file), header=None ,keep_default_na=False)
+    #     for itm in items:
+    #         if(itm+' 合计' in data_fy.iloc[0].to_list()):     
+    #             data_fy.iloc[0][data_fy.iloc[0].tolist().index(itm+' 合计')] = '合计'
+    #     data_fy.to_excel(trans_fold_path+'\\'+file, index = False, header=False)
